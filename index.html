@@ -45,7 +45,7 @@
   #fine { display: none; margin-top: 20px; font-size: 22px; text-align: center; line-height: 1.5; }
   #fine b { color: var(--oro); }
   /* cellulare in orizzontale: solo il video, grande quanto lo schermo */
-  @media (orientation: landscape) and (max-height: 600px) {
+  @media (orientation: landscape) and (pointer: coarse), (orientation: landscape) and (max-height: 600px) {
     body { padding: 0; justify-content: center; background: #000; min-height: 100vh; min-height: 100dvh; }
     .alto, h1, .data, .riga, .nota, #fine, #ferma { display: none !important; }
     .pulsanti { margin: 0; height: 0; }
