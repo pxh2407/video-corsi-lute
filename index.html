@@ -76,6 +76,21 @@
     document.getElementById("fine").style.display = "block";
   });
   v.addEventListener("play", () => { document.getElementById("fine").style.display = "none"; });
+  // sul cellulare: al primo tocco di ▶ schermo intero e, dove il telefono lo permette (Android), orizzontale
+  const cellulare = window.matchMedia("(pointer: coarse)").matches;
+  v.addEventListener("play", async () => {
+    if (!cellulare || document.fullscreenElement || v.webkitDisplayingFullscreen) return;
+    try {
+      if (v.requestFullscreen) await v.requestFullscreen();
+      else if (v.webkitEnterFullscreen) { v.webkitEnterFullscreen(); return; }
+      if (screen.orientation && screen.orientation.lock) await screen.orientation.lock("landscape");
+    } catch (e) { /* il telefono non lo consente: si continua normalmente */ }
+  });
+  document.addEventListener("fullscreenchange", () => {
+    if (!document.fullscreenElement && screen.orientation && screen.orientation.unlock) {
+      try { screen.orientation.unlock(); } catch (e) {}
+    }
+  });
   // esci: prova a chiudere la pagina; se il telefono non lo permette, spiega come fare
   document.getElementById("esci").onclick = () => {
     ferma();
