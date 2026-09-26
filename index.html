@@ -117,6 +117,11 @@
   const cellulare = window.matchMedia("(pointer: coarse)").matches;
   v.addEventListener("play", async () => {
     if (!cellulare || document.fullscreenElement || v.webkitDisplayingFullscreen) return;
+    // Se il telefono è GIÀ in orizzontale il video riempie da solo lo schermo (vedi il CSS
+    // più sopra): chiedere lo schermo intero vero non servirebbe a nulla e farebbe comparire
+    // per qualche secondo l'avviso col nome del sito, che il browser mostra sempre e che
+    // non si può togliere. Quindi in orizzontale lo si lascia stare.
+    if (window.matchMedia("(orientation: landscape)").matches) return;
     try {
       if (v.requestFullscreen) await v.requestFullscreen();
       else if (v.webkitEnterFullscreen) { v.webkitEnterFullscreen(); return; }
