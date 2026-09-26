@@ -92,7 +92,10 @@
     if (v.webkitDisplayingFullscreen) v.webkitExitFullscreen();
   }
   // ferma: interrompe il video e torna all'immagine iniziale
-  function ferma() { v.pause(); esciSchermoIntero(); v.currentTime = 0; v.load(); }
+  function ferma() {
+    v.pause(); esciSchermoIntero(); v.currentTime = 0; v.load();
+    document.getElementById("grande").hidden = false;
+  }
   document.getElementById("ferma").onclick = ferma;
   // un tocco su "Guarda il video" o sul grande ▶ al centro fa partire il video
   const grande = document.getElementById("grande");
