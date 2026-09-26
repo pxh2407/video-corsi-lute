@@ -33,6 +33,15 @@
           box-shadow: 0 12px 40px rgba(0,0,0,.45); }
   .nota { margin-top: 18px; font-size: 19px; text-align: center; max-width: 640px; line-height: 1.5; }
   .nota b { color: var(--oro); }
+  .pulsanti { display: flex; gap: 14px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+  .pulsanti button {
+    font: inherit; font-size: 21px; font-weight: 600; padding: 14px 28px; border-radius: 12px;
+    cursor: pointer; min-width: 150px; border: 2px solid var(--oro);
+  }
+  #ferma { background: var(--crema); color: var(--scuro); }
+  #esci { background: transparent; color: var(--crema); }
+  #fine { display: none; margin-top: 20px; font-size: 22px; text-align: center; line-height: 1.5; }
+  #fine b { color: var(--oro); }
 </style>
 </head>
 <body>
@@ -41,6 +50,39 @@
   <div class="data">LUNEDÌ 5 OTTOBRE</div>
   <div class="riga"></div>
   <video src="video-corsi-lute.mp4" poster="copertina.jpg" controls playsinline preload="metadata"></video>
-  <p class="nota">Tocchi il pulsante <b>▶</b> per guardare il video.<br>Vi aspettiamo!</p>
+  <p class="nota" id="nota">Tocchi il pulsante <b>▶</b> per guardare il video.<br>Vi aspettiamo!</p>
+  <p id="fine">Grazie per aver guardato il video!<br><b>Vi aspettiamo lunedì 5 ottobre.</b></p>
+  <div class="pulsanti">
+    <button id="ferma" type="button">⏹ Ferma</button>
+    <button id="esci" type="button">✕ Esci</button>
+  </div>
+  <p class="nota" id="aiuto" hidden>Per chiudere, tocchi la <b>✕</b> o la freccia <b>←</b> in alto a sinistra dello schermo.</p>
+<script>
+  const v = document.querySelector("video");
+  function esciSchermoIntero() {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    if (document.webkitFullscreenElement) document.webkitExitFullscreen();
+    if (v.webkitDisplayingFullscreen) v.webkitExitFullscreen();
+  }
+  // ferma: interrompe il video e torna all'immagine iniziale
+  function ferma() { v.pause(); esciSchermoIntero(); v.currentTime = 0; v.load(); }
+  document.getElementById("ferma").onclick = ferma;
+  // a fine video: esce da solo dallo schermo intero e mostra il saluto
+  v.addEventListener("ended", () => {
+    ferma();
+    document.getElementById("nota").style.display = "none";
+    document.getElementById("fine").style.display = "block";
+  });
+  v.addEventListener("play", () => { document.getElementById("fine").style.display = "none"; });
+  // esci: prova a chiudere la pagina; se il telefono non lo permette, spiega come fare
+  document.getElementById("esci").onclick = () => {
+    ferma();
+    window.close();
+    setTimeout(() => {
+      if (history.length > 1) history.back();
+      document.getElementById("aiuto").hidden = false;
+    }, 300);
+  };
+</script>
 </body>
 </html>
